@@ -1,0 +1,40 @@
+:root {
+    --button-color: rgb(107, 23, 155);
+    --button-color-2: rgb(162, 94, 202);
+    --wrong-button: rgb(155, 25, 25);
+    --site-font: "Calibri", "Helvetica", "Futura";
+}
+
+* {
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    font-family: var(--site-font);
+}
+
+header {
+    text-align: center;
+    margin: 20vh 0 10vh 0;
+}
+
+h2 {
+    text-align: center;
+    margin: 0 15vh 5vh 15vh;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    background-color: var(--button-color);
+    color: white;
+    font-size: 150%;
+    padding: 5px 30px;
+    margin: 0 auto;
+    border-radius: 10px;
+    border-color: var(--button-color);
+}
+
+.timer {
+    position: fixed;
+    top: 5vh;
+    right: 5vh;
+}
