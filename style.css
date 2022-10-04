@@ -16,12 +16,12 @@ header {
     margin: 20vh 0 10vh 0;
 }
 
-h2 {
+.main-text {
     text-align: center;
     margin: 0 15vh 5vh 15vh;
 }
 
-button {
+#start-button {
     display: flex;
     align-items: center;
     background-color: var(--button-color);
@@ -31,10 +31,12 @@ button {
     margin: 0 auto;
     border-radius: 10px;
     border-color: var(--button-color);
+    cursor: pointer;
 }
 
-.timer {
+#timer {
     position: fixed;
     top: 5vh;
     right: 5vh;
+    /* visibility: hidden; */
 }
