@@ -3,12 +3,15 @@ var startButton = document.getElementById("start-button");
 var timerEl = document.getElementById("timer");
 var promptEl = document.getElementById("prompt");
 var questionListEl = document.getElementById("question-list");
+var qListChildEl = questionListEl.getElementsByTagName("li");
 
 // DATA
     // Win-Lose status and trackers
 var wins = 0;
 var losses = 0;
 var isWin = false;
+var selected = "";
+var answer = "";
 
     // Questions and Answers
 var questionOne = "Which of the following is NOT a primitive data type?";
@@ -38,8 +41,7 @@ var questionThreeQs = [
 ];
 var answerThree = "Determinations";
 
-var selected;
-var answer;
+var answers = ["Function", "var", "Determinations"];
 
     // Initially empty list of quiz takers and their scores
 var quiztaker = [];
@@ -49,7 +51,6 @@ var highscore = [];
     // When "start" button is clicked, quiz and timer starts
 startButton.addEventListener("click", function() {
     gameStart();
-    timer();
 });
 
 function gameStart() {
@@ -60,44 +61,65 @@ function gameStart() {
             var eachQ = document.createElement("li");
             eachQ.innerHTML = questionOneQs[i];
             questionListEl.appendChild(eachQ);
-            startButton.innerHTML = "Go to Question 2";
         }
+        startButton.innerHTML = "Go to Question 2";
+        startButton.removeAttribute("onclick");
     } else if (startButton.innerHTML == "Go to Question 2") {
         promptEl.innerHTML = questionTwo;
         for (let i = 0; i < questionTwoQs.length; i++) {
             console.log(questionTwoQs[i]);
             questionListEl.children[i].innerHTML = questionTwoQs[i];
-            startButton.innerHTML = "Go to Last Question";
+            questionListEl.children[i].style.backgroundColor = "var(--button-color)";
         }
+        startButton.innerHTML = "Go to Last Question";
     } else if (startButton.innerHTML == "Go to Last Question") {
         promptEl.innerHTML = questionThree;
         for (let i = 0; i <questionThreeQs.length; i++) {
             console.log(questionThreeQs[i]);
             questionListEl.children[i].innerHTML = questionThreeQs[i];
-            startButton.innerHTML = "Finish";
+            questionListEl.children[i].style.backgroundColor = "var(--button-color)";
         }
+        startButton.innerHTML = "Finish";
     }
-    // Need to add for once finished
+    // Need to show highscore page once done with quiz
 };
+var timeLeft = 61;
 
 function timer() {
-    var timeLeft = 31;
     var timeInteval = setInterval(function() {
         timeLeft--;
-        timerEl.textContent = timeLeft + ":00";
+        timerEl.textContent = timeLeft + " seconds left";
 
-        if (timeLeft === 0) {
+        if (timeLeft <= 10) {
+            timerEl.style.color = "var(--wrong-button)";
+        } else if (timeLeft === 0) {
             clearInterval(timeInteval);
         }
     }, 1000);
-}
-
+};
     // Determine whether answer selected is right or wrong
         // If right, move on to next question
         // If wrong, highlight red and deduct time from timer
 
+questionListEl.addEventListener("click", function() {
+    checkAnswer();
+});
 
-    // Display next question
+function checkAnswer() {
+    startButton.disabled = true;
+    if (answers.includes(event.target.innerHTML)) {
+        event.target.style.backgroundColor = "var(--button-color-2)";
+        console.log(event.target.innerHTML + " is correct");
+        isWin = true;
+        startButton.disabled = false;
+    } else {
+        event.target.style.backgroundColor = "var(--wrong-button)";
+        console.log(event.target.innerHTML + " is incorrect");
+        isWin = false;
+        startButton.disabled = true;
+    }
+};
+
     // When user inputs initials, add to list of finished quizzes
         // Order the list based on score/time
 
