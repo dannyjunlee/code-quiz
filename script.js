@@ -1,8 +1,8 @@
 // DEPENDENCIES
 var startButton = document.getElementById("start-button");
 var timerEl = document.getElementById("timer");
-var headerEl = document.getElementsByClassName("main-text");
-var questionListEl = document.getElementsByClassName("question-list");
+var promptEl = document.getElementById("prompt");
+var questionListEl = document.getElementById("question-list");
 
 // DATA
     // Win-Lose status and trackers
@@ -25,7 +25,7 @@ var questionTwoQs = [
     "assign",
     "var",
     "Just name it",
-    "There are no variables in JavaScript"
+    "There are no such things"
 ];
 var answerTwo = "var";
 
@@ -38,55 +38,65 @@ var questionThreeQs = [
 ];
 var answerThree = "Determinations";
 
+var selected;
+var answer;
+
     // Initially empty list of quiz takers and their scores
 var quiztaker = [];
 var highscore = [];
 
 // FUNCTIONS
     // When "start" button is clicked, quiz and timer starts
+startButton.addEventListener("click", function() {
+    gameStart();
+    timer();
+});
+
 function gameStart() {
-    headerEl.innerHTML = questionOne;
-    for (let i = 0; i < questionOneQs.length; i++) {
-        var itemList = document.createElement("li");
-        itemList.innerHTML = questionOneQs[i];
-        questionListEl.appendChild(itemList);
-    }
-};
-
-startButton.addEventListener("click", gameStart());
-
-function timer() {
-    var timeLeft = 75;
-    var timeInterval = setInterval(function() {
-        timeLeft--;
-        timerEl.textContent = timeLeft;
-    })
-
-    if (timeLeft === 0) {
-        clearInterval(timeInterval);
-        if (isWin) {
-            headerEl.innerHTML = "Congrats, you win!"
+    if (startButton.innerHTML == "Start") {
+        promptEl.innerHTML = questionOne;
+        for (let i = 0; i < questionOneQs.length; i++) {
+            console.log(questionOneQs[i]);
+            var eachQ = document.createElement("li");
+            eachQ.innerHTML = questionOneQs[i];
+            questionListEl.appendChild(eachQ);
+            startButton.innerHTML = "Go to Question 2";
+        }
+    } else if (startButton.innerHTML == "Go to Question 2") {
+        promptEl.innerHTML = questionTwo;
+        for (let i = 0; i < questionTwoQs.length; i++) {
+            console.log(questionTwoQs[i]);
+            questionListEl.children[i].innerHTML = questionTwoQs[i];
+            startButton.innerHTML = "Go to Last Question";
+        }
+    } else if (startButton.innerHTML == "Go to Last Question") {
+        promptEl.innerHTML = questionThree;
+        for (let i = 0; i <questionThreeQs.length; i++) {
+            console.log(questionThreeQs[i]);
+            questionListEl.children[i].innerHTML = questionThreeQs[i];
+            startButton.innerHTML = "Finish";
         }
     }
+    // Need to add for once finished
 };
 
-// Timer needs separate function probably
-function countdown() {
-    var timeLeft = 60;
-
+function timer() {
+    var timeLeft = 31;
     var timeInteval = setInterval(function() {
         timeLeft--;
-        timerEl.textContent = timeLeft;
+        timerEl.textContent = timeLeft + ":00";
 
-        // if (timeLeft === 0) {
-        //     clearInterval(timeInteval);
-        // }    
+        if (timeLeft === 0) {
+            clearInterval(timeInteval);
+        }
     }, 1000);
 }
 
     // Determine whether answer selected is right or wrong
         // If right, move on to next question
         // If wrong, highlight red and deduct time from timer
+
+
     // Display next question
     // When user inputs initials, add to list of finished quizzes
         // Order the list based on score/time

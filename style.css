@@ -16,9 +16,28 @@ header {
     margin: 20vh 0 10vh 0;
 }
 
-.main-text {
+#prompt {
     text-align: center;
     margin: 0 15vh 5vh 15vh;
+}
+
+#question-list {
+    margin-bottom: 5vh;
+}
+
+#question-list li {
+    margin: 10px 0 0 40%;
+    list-style: none;
+    font-size: 150%;
+    background-color: var(--button-color);
+    color: white;
+    padding: 5px 30px;
+    border-radius: 10px;
+    border-color: var(--button-color);
+    cursor: pointer;
+    width: 35%;
+    text-align: left;
+    margin-left: 30%;
 }
 
 #start-button {
@@ -37,6 +56,5 @@ header {
 #timer {
     position: fixed;
     top: 5vh;
-    right: 5vh;
-    /* visibility: hidden; */
+    right: 15vh;
 }
