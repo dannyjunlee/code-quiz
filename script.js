@@ -4,6 +4,9 @@ var timerEl = document.getElementById("timer");
 var promptEl = document.getElementById("prompt");
 var questionListEl = document.getElementById("question-list");
 var qListChildEl = questionListEl.getElementsByTagName("li");
+var scoreEl = document.getElementById("scoreboard");
+var formEl = document.querySelector("form");
+var initialInput = document.querySelector("#initials");
 
 // DATA
     // Win-Lose status and trackers
@@ -44,13 +47,21 @@ var answerThree = "Determinations";
 var answers = ["Function", "var", "Determinations"];
 
     // Initially empty list of quiz takers and their scores
-var quiztaker = [];
-var highscore = [];
+var highscore = {
+    "initial": "",
+    "score": ""
+}
+
+var highscoreTotal = [];
 
 // FUNCTIONS
     // When "start" button is clicked, quiz and timer starts
 startButton.addEventListener("click", function() {
-    gameStart();
+    if (startButton.innerHTML === "Finish") {
+        endGame();
+    } else {
+        gameStart();
+    }
 });
 
 function gameStart() {
@@ -88,12 +99,14 @@ var timeLeft = 61;
 function timer() {
     var timeInteval = setInterval(function() {
         timeLeft--;
-        timerEl.textContent = timeLeft + " seconds left";
+        timerEl.textContent = timeLeft + " seconds remaining";
 
         if (timeLeft <= 10) {
             timerEl.style.color = "var(--wrong-button)";
-        } else if (timeLeft === 0) {
+        }
+        if (timeLeft === 0) {
             clearInterval(timeInteval);
+            endGame();
         }
     }, 1000);
 };
@@ -117,8 +130,48 @@ function checkAnswer() {
         console.log(event.target.innerHTML + " is incorrect");
         isWin = false;
         startButton.disabled = true;
+        timeLeft -= 5;
     }
 };
+
+
+
+function endGame() {
+    event.preventDefault();
+    timerEl.innerHTML = "";
+    console.log("End game");
+    promptEl.innerHTML = "You've reached the end of this quiz. How did you do? <br> " +
+    "Enter your initials to see your score:";
+    
+    questionListEl.remove();
+    startButton.style.visibility = "hidden";
+    formEl.style.visibility = "visible";
+};
+
+// Log score
+formEl.addEventListener("submit", function() {
+    event.preventDefault();
+    highscore["initial"] = initialInput.value;
+    highscore["score"] = timeLeft;
+    highscoreTotal.push(highscore);
+    localStorage.setItem("highscore", JSON.stringify(highscore));
+    localStorage.setItem("highscoreTotal", JSON.stringify(highscoreTotal));
+
+    console.log(highscore);
+    console.log(JSON.parse(localStorage.getItem("highscore")));
+    console.log(highscoreTotal);
+});
+
+// High score page
+// scoreEl.addEventListener("click", function() {
+//     scoreEl.style.color = "blueviolet";
+//     promptEl.innerHTML = "High Scores:";
+//     for (let i = 0; i < highscore.length; i++) {
+//         var hs = document.createElement("li");
+//         hs.innerHTML = highscore[i];
+//         promptEl.appendChild(hs);
+//     }
+// });
 
     // When user inputs initials, add to list of finished quizzes
         // Order the list based on score/time
