@@ -52,7 +52,7 @@ var highscore = {
     "score": ""
 }
 
-var highscoreTotal = [];
+var highscoreTotal = {};
 
 // FUNCTIONS
     // When "start" button is clicked, quiz and timer starts
@@ -68,7 +68,6 @@ function gameStart() {
     if (startButton.innerHTML == "Start") {
         promptEl.innerHTML = questionOne;
         for (let i = 0; i < questionOneQs.length; i++) {
-            console.log(questionOneQs[i]);
             var eachQ = document.createElement("li");
             eachQ.innerHTML = questionOneQs[i];
             questionListEl.appendChild(eachQ);
@@ -78,7 +77,6 @@ function gameStart() {
     } else if (startButton.innerHTML == "Go to Question 2") {
         promptEl.innerHTML = questionTwo;
         for (let i = 0; i < questionTwoQs.length; i++) {
-            console.log(questionTwoQs[i]);
             questionListEl.children[i].innerHTML = questionTwoQs[i];
             questionListEl.children[i].style.backgroundColor = "var(--button-color)";
         }
@@ -86,7 +84,6 @@ function gameStart() {
     } else if (startButton.innerHTML == "Go to Last Question") {
         promptEl.innerHTML = questionThree;
         for (let i = 0; i <questionThreeQs.length; i++) {
-            console.log(questionThreeQs[i]);
             questionListEl.children[i].innerHTML = questionThreeQs[i];
             questionListEl.children[i].style.backgroundColor = "var(--button-color)";
         }
@@ -122,12 +119,10 @@ function checkAnswer() {
     startButton.disabled = true;
     if (answers.includes(event.target.innerHTML)) {
         event.target.style.backgroundColor = "var(--button-color-2)";
-        console.log(event.target.innerHTML + " is correct");
         isWin = true;
         startButton.disabled = false;
     } else {
         event.target.style.backgroundColor = "var(--wrong-button)";
-        console.log(event.target.innerHTML + " is incorrect");
         isWin = false;
         startButton.disabled = true;
         timeLeft -= 5;
@@ -153,6 +148,9 @@ function storeScore() {
     localStorage.setItem("highscoreTotal", JSON.stringify(highscoreTotal));
 };
 
+var hsInitial = "";
+var hsScore = "";
+
 formEl.addEventListener("submit", function(event) {
     event.preventDefault();
 
@@ -164,9 +162,12 @@ formEl.addEventListener("submit", function(event) {
 
     highscore["initial"] = initialInput.value;
     highscore["score"] = timeLeft;
-    
-    highscoreTotal.push(scoreText);
+    hsInitial = initialInput.value;
+    hsScore = timeLeft;
 
+    var li = document.createElement("li");
+    li.textContent = "Congrats " + hsInitial + ", you solved the quiz with " + hsScore + " seconds remaining.";
+    promptEl.appendChild(li);
 
     console.log(highscore);
     console.log(JSON.parse(localStorage.getItem("highscore")));
@@ -179,10 +180,11 @@ formEl.addEventListener("submit", function(event) {
 scoreEl.addEventListener("click", function() {
     scoreEl.style.color = "blueviolet";
     promptEl.innerHTML = "High Scores: ";
+    console.log(highscoreTotal);
 
     for (let i = 0; i < highscoreTotal.length; i++) {
         var hs = document.createElement("li");
-        hs.innerHTML = highscoreTotal.initial[i] + " finished with " + highscoreTotal.score[i] + " seconds remaining!";
+        hs.textContent = hsInitial + " solved the quiz with " + hsScore + " seconds remaining.";
         promptEl.appendChild(hs);
     }
 });
