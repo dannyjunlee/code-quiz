@@ -149,29 +149,43 @@ function endGame() {
 };
 
 // Log score
-formEl.addEventListener("submit", function() {
+function storeScore() {
+    localStorage.setItem("highscoreTotal", JSON.stringify(highscoreTotal));
+};
+
+formEl.addEventListener("submit", function(event) {
     event.preventDefault();
+
+    var scoreText = initialInput.value.trim();
+
+    if (scoreText === "") {
+        return;
+    }
+
     highscore["initial"] = initialInput.value;
     highscore["score"] = timeLeft;
-    highscoreTotal.push(highscore);
-    localStorage.setItem("highscore", JSON.stringify(highscore));
-    localStorage.setItem("highscoreTotal", JSON.stringify(highscoreTotal));
+    
+    highscoreTotal.push(scoreText);
+
 
     console.log(highscore);
     console.log(JSON.parse(localStorage.getItem("highscore")));
     console.log(highscoreTotal);
+
+    storeScore();
 });
 
 // High score page
-// scoreEl.addEventListener("click", function() {
-//     scoreEl.style.color = "blueviolet";
-//     promptEl.innerHTML = "High Scores:";
-//     for (let i = 0; i < highscore.length; i++) {
-//         var hs = document.createElement("li");
-//         hs.innerHTML = highscore[i];
-//         promptEl.appendChild(hs);
-//     }
-// });
+scoreEl.addEventListener("click", function() {
+    scoreEl.style.color = "blueviolet";
+    promptEl.innerHTML = "High Scores: ";
+
+    for (let i = 0; i < highscoreTotal.length; i++) {
+        var hs = document.createElement("li");
+        hs.innerHTML = highscoreTotal.initial[i] + " finished with " + highscoreTotal.score[i] + " seconds remaining!";
+        promptEl.appendChild(hs);
+    }
+});
 
     // When user inputs initials, add to list of finished quizzes
         // Order the list based on score/time
